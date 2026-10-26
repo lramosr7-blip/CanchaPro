@@ -2,6 +2,7 @@
 package modelo;
 
 import java.io.*;
+import java.time.LocalTime;
 
 public class Repositorio {
    
@@ -16,6 +17,23 @@ public class Repositorio {
 
     public Pago[] pagos = new Pago[1000];
     public int numPagos = 0;
+    
+    public modelo.ServicioAdicional[] servicios = new modelo.ServicioAdicional[20];
+    public int numServicios = 0;
+    
+    public boolean agregarServicio (modelo.ServicioAdicional s){
+        if (numServicios >= servicios.length ) return false;
+        servicios[numServicios] = s;
+        numServicios ++;
+        return true;
+    }
+    
+    public modelo.ServicioAdicional buscarServicioPorCodigo(String codigo){
+        for (int i = 0; i<numServicios; i++){
+            if (servicios[i].getCodigo().equals(codigo)) return servicios[i];
+        }
+        return null;
+    }
 
     private final String RUTA_CLIENTES = "datos/clientes.csv";
     private final String RUTA_CANCHAS   = "datos/canchas.csv";
@@ -73,15 +91,12 @@ public class Repositorio {
     }
 
     public boolean seTraslapan(String inicio1, String fin1, String inicio2, String fin2) {
-        int i1 = horaAMinutos(inicio1);
-        int f1 = horaAMinutos(fin1);
-        int i2 = horaAMinutos(inicio2);
-        int f2 = horaAMinutos(fin2);
+        LocalTime i1 = LocalTime.parse(inicio1);
+        LocalTime f1 = LocalTime.parse(fin1);
+        LocalTime i2 = LocalTime.parse(inicio2);
+        LocalTime f2 = LocalTime.parse(fin2);
 
-        if (i1 < f2 && f1 > i2) {
-            return true; 
-        }
-        return false; 
+        return i1.isBefore(f2) && f1.isAfter(i2);
     }
 
     public boolean esCanchaDisponible(String codigoCancha, String fecha, String horaInicio, String horaFin) {
@@ -92,12 +107,12 @@ public class Repositorio {
             return false;
         }
 
-        int apertura = horaAMinutos(c.getHoraApertura());
-        int cierre = horaAMinutos(c.getHoraCierre());
-        int inicioSol = horaAMinutos(horaInicio);
-        int finSol = horaAMinutos(horaFin);
+        LocalTime apertura = LocalTime.parse(c.getHoraApertura());
+        LocalTime cierre = LocalTime.parse(c.getHoraCierre());
+        LocalTime inicioSol = LocalTime.parse(horaInicio);
+        LocalTime finSol = LocalTime.parse(horaFin);
 
-        if (inicioSol < apertura || finSol > cierre) {
+        if (inicioSol.isBefore(apertura) || finSol.isAfter(cierre)) {
             return false; 
         }
 
@@ -211,4 +226,26 @@ public class Repositorio {
         agregarCancha(new Cancha("C02", "El Maracaná",  "Fútbol 5", 10, "08:00", "23:00", Cancha.DISPONIBLE));
         agregarCancha(new Cancha("C03", "El Monumental","Fútbol 7", 14, "08:00", "23:00", Cancha.DISPONIBLE));
     }
+    
+    public void cargarServiciosPorDefecto(){
+        if (numServicios>0) return;
+            agregarServicio(new modelo.ServicioAdicional("S01", "Balón", 30, true));
+            agregarServicio(new modelo.ServicioAdicional("S02", "Arbitro", 100, true));
+            agregarServicio(new modelo.ServicioAdicional("S03", "Chalecos", 25, true));
+                    
+        
+    
+}
+    
+    public double calcularTotalPagado(String codigoReserva){
+        double total = 0;
+        for (int i =0; i<numPagos; i++){
+            if (pagos[i].getCodigoReserva().equals(codigoReserva)){
+                total += pagos[i].getMonto();
+            }
+        }
+        return total;
+    }
+    
+    
 }

@@ -11,6 +11,7 @@ public class CanchaPro {
     Repositorio repo = new Repositorio();
     repo.cargarTodo();
     repo.cargarCanchasPorDefecto();
+    repo.cargarServiciosPorDefecto();
     
     VentanaPrincipal ventana = new VentanaPrincipal(repo);
 

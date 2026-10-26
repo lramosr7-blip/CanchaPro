@@ -14,6 +14,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private PanelDashboard panelDash;
     private PanelClientes panelCli;
     private PanelReservas panelRes;
+    private PanelPagos panelPag;
     
     public VentanaPrincipal(modelo.Repositorio repo) {
         initComponents();
@@ -26,10 +27,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelDash = new PanelDashboard(repo);
        panelCli = new PanelClientes(repo);
         panelRes = new PanelReservas(repo);
+        panelPag = new PanelPagos(repo);
+        
        
        panelCentral.add(panelDash, "dashboard");
        panelCentral.add(panelCli, "clientes");
        panelCentral.add(panelRes, "reservas");
+       panelCentral.add(panelPag, "pagos");
        
        cardLayout.show(panelCentral, "dashboard");
        
@@ -53,6 +57,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnClientes = new javax.swing.JButton();
         btnReservas = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
+        btnPagos = new javax.swing.JButton();
         panelCentral = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -120,6 +125,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnGuardar.setPreferredSize(new java.awt.Dimension(200, 50));
         btnGuardar.addActionListener(this::btnGuardarActionPerformed);
 
+        btnPagos.setBackground(new java.awt.Color(8, 13, 16));
+        btnPagos.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        btnPagos.setForeground(new java.awt.Color(220, 230, 235));
+        btnPagos.setText("Pagos");
+        btnPagos.setBorderPainted(false);
+        btnPagos.setFocusPainted(false);
+        btnPagos.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPagos.setOpaque(true);
+        btnPagos.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnPagos.addActionListener(this::btnPagosActionPerformed);
+
         javax.swing.GroupLayout panelLateralLayout = new javax.swing.GroupLayout(panelLateral);
         panelLateral.setLayout(panelLateralLayout);
         panelLateralLayout.setHorizontalGroup(
@@ -140,6 +156,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLateralLayout.createSequentialGroup()
                         .addContainerGap()
+                        .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLateralLayout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -155,8 +174,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(449, Short.MAX_VALUE))
+                .addContainerGap(382, Short.MAX_VALUE))
         );
 
         jPanel4.add(panelLateral, java.awt.BorderLayout.WEST);
@@ -209,12 +230,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelRes.actualizarTabla();
     }//GEN-LAST:event_btnReservasActionPerformed
 
+    private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
+        cardLayout.show(panelCentral, "pagos");
+    }//GEN-LAST:event_btnPagosActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnPagos;
     private javax.swing.JButton btnReservas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
