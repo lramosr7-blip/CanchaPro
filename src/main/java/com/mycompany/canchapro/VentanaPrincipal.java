@@ -1,13 +1,17 @@
 
 package com.mycompany.canchapro;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 
 public class VentanaPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
-
+   
+   
     private modelo.Repositorio repo; 
     private java.awt.CardLayout cardLayout;
     
@@ -15,9 +19,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private PanelClientes panelCli;
     private PanelReservas panelRes;
     private PanelPagos panelPag;
+    private PanelCanchas panelCan;
     
     public VentanaPrincipal(modelo.Repositorio repo) {
         initComponents();
+        
+        
+        
         this.repo = repo;
         this.setLocationRelativeTo(null);
         
@@ -28,16 +36,30 @@ public class VentanaPrincipal extends javax.swing.JFrame {
        panelCli = new PanelClientes(repo);
         panelRes = new PanelReservas(repo);
         panelPag = new PanelPagos(repo);
+        panelCan = new PanelCanchas(repo);
+        
         
        
        panelCentral.add(panelDash, "dashboard");
        panelCentral.add(panelCli, "clientes");
        panelCentral.add(panelRes, "reservas");
        panelCentral.add(panelPag, "pagos");
+       panelCentral.add(panelCan, "canchas");
        
        cardLayout.show(panelCentral, "dashboard");
+        Timer timer = new Timer(5000, new ActionListener(){
+        public void actionPerformed(ActionEvent e){
+            repo.actualizarEstadosAutomaticos();
+            if (panelRes != null){
+                panelRes.actualizarTabla();
+            }
+        }
+        
+    });
+    
+    timer.start();
        
-               
+             
     }
  
         
@@ -54,10 +76,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelLateral = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnDashboard = new javax.swing.JButton();
-        btnClientes = new javax.swing.JButton();
         btnReservas = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnPagos = new javax.swing.JButton();
+        btnCanchas = new javax.swing.JButton();
+        btnClientes = new javax.swing.JButton();
         panelCentral = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -92,17 +115,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnDashboard.setPreferredSize(new java.awt.Dimension(200, 50));
         btnDashboard.addActionListener(this::btnDashboardActionPerformed);
 
-        btnClientes.setBackground(new java.awt.Color(8, 13, 16));
-        btnClientes.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
-        btnClientes.setForeground(new java.awt.Color(220, 230, 235));
-        btnClientes.setText("Clientes");
-        btnClientes.setBorderPainted(false);
-        btnClientes.setFocusPainted(false);
-        btnClientes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btnClientes.setOpaque(true);
-        btnClientes.setPreferredSize(new java.awt.Dimension(200, 50));
-        btnClientes.addActionListener(this::btnClientesActionPerformed);
-
         btnReservas.setBackground(new java.awt.Color(8, 13, 16));
         btnReservas.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
         btnReservas.setForeground(new java.awt.Color(220, 230, 235));
@@ -136,6 +148,29 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnPagos.setPreferredSize(new java.awt.Dimension(200, 50));
         btnPagos.addActionListener(this::btnPagosActionPerformed);
 
+        btnCanchas.setBackground(new java.awt.Color(8, 13, 16));
+        btnCanchas.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        btnCanchas.setForeground(new java.awt.Color(220, 230, 235));
+        btnCanchas.setText("Canchas");
+        btnCanchas.setToolTipText("");
+        btnCanchas.setBorderPainted(false);
+        btnCanchas.setFocusPainted(false);
+        btnCanchas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnCanchas.setOpaque(true);
+        btnCanchas.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnCanchas.addActionListener(this::btnCanchasActionPerformed);
+
+        btnClientes.setBackground(new java.awt.Color(8, 13, 16));
+        btnClientes.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        btnClientes.setForeground(new java.awt.Color(220, 230, 235));
+        btnClientes.setText("Clientes");
+        btnClientes.setBorderPainted(false);
+        btnClientes.setFocusPainted(false);
+        btnClientes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnClientes.setOpaque(true);
+        btnClientes.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnClientes.addActionListener(this::btnClientesActionPerformed);
+
         javax.swing.GroupLayout panelLateralLayout = new javax.swing.GroupLayout(panelLateral);
         panelLateral.setLayout(panelLateralLayout);
         panelLateralLayout.setHorizontalGroup(
@@ -150,16 +185,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(btnDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLateralLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(panelLateralLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLateralLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLateralLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLateralLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnCanchas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLateralLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLateralLayout.setVerticalGroup(
@@ -169,15 +207,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(26, 26, 26)
                 .addComponent(btnDashboard, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCanchas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnReservas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(382, Short.MAX_VALUE))
+                .addContainerGap(332, Short.MAX_VALUE))
         );
 
         jPanel4.add(panelLateral, java.awt.BorderLayout.WEST);
@@ -218,6 +258,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btnDashboardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDashboardActionPerformed
             cardLayout.show(panelCentral, "dashboard");
+            panelDash.actualizarDashboard();
     }//GEN-LAST:event_btnDashboardActionPerformed
 
     private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
@@ -232,11 +273,17 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void btnPagosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagosActionPerformed
         cardLayout.show(panelCentral, "pagos");
+        panelPag.actualizarReservas();
     }//GEN-LAST:event_btnPagosActionPerformed
+
+    private void btnCanchasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCanchasActionPerformed
+        cardLayout.show(panelCentral, "canchas");
+    }//GEN-LAST:event_btnCanchasActionPerformed
 
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCanchas;
     private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnGuardar;

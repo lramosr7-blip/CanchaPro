@@ -18,6 +18,13 @@ public class Reserva {
     private String horaFin;
     private double total;
     private String estado;
+    
+    
+    //para la cancelacion de alguna reserva
+    private String motioCancelacion;
+    private String fechaCancelacion;
+    
+    
 
     public Reserva(String codigo, String codigoCliente, String codigoCancha, String fecha, String horaInicio, String horaFin, double total, String estado) {
         this.codigo = codigo;
@@ -78,5 +85,26 @@ public class Reserva {
         String [] p = linea.split(",");
         return new Reserva (p[0], p[1], p[2], p[3], p[4], p[5], Double.parseDouble(p[6]), p[7]);
     }
+
+    public String getMotioCancelacion() {
+        return motioCancelacion;
+    }
+
+    public String getFechaCancelacion() {
+        return fechaCancelacion;
+    }
+
+    public void setHoraInicio(String horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public void setMotioCancelacion(String motioCancelacion) {
+        this.motioCancelacion = motioCancelacion;
+    }
+    
+    
+    
+    
+    
     
 }

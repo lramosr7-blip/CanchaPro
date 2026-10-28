@@ -2,7 +2,9 @@
 package modelo;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Repositorio {
    
@@ -50,9 +52,11 @@ public class Repositorio {
 
     public boolean agregarCancha(Cancha c) {
         if (numCanchas >= canchas.length) return false;
+        if(buscarCanchaPorCodigo(c.getCodigo()) != null) return false;
         canchas[numCanchas] = c;
         numCanchas++;
         return true;
+        
     }
 
     public boolean agregarReserva(Reserva r) {
@@ -106,26 +110,45 @@ public class Repositorio {
         if (!c.getEstado().equals(Cancha.DISPONIBLE)) {
             return false;
         }
-
-        LocalTime apertura = LocalTime.parse(c.getHoraApertura());
-        LocalTime cierre = LocalTime.parse(c.getHoraCierre());
+        
+        try{
+            DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("H:mm");
+        LocalTime apertura = LocalTime.parse(c.getHoraApertura(),formatoHora);
+        LocalTime cierre = LocalTime.parse(c.getHoraCierre(), formatoHora);
         LocalTime inicioSol = LocalTime.parse(horaInicio);
-        LocalTime finSol = LocalTime.parse(horaFin);
-
+        LocalTime finSol = LocalTime.parse(horaFin, formatoHora);
+        
         if (inicioSol.isBefore(apertura) || finSol.isAfter(cierre)) {
             return false; 
         }
-
-        for (int i = 0; i < numReservas; i++) {
+        
+        
+        for (int i =0; i<numReservas; i++){
             Reserva r = reservas[i];
-            if (r.getCodigoCancha().equals(codigoCancha) && r.getFecha().equals(fecha) 
-                && !r.getEstado().equals(Reserva.CANCELADA)) {
+            if (r.getCodigoCancha().equals(codigoCancha)&& r.getFecha().equals(fecha) && !r.getEstado().equals(Reserva.CANCELADA)){
+                LocalTime i2 = LocalTime.parse(r.getHoraInicio(),formatoHora);
+                LocalTime f2 = LocalTime.parse(r.getHoraFin(), formatoHora);
                 
-                if (seTraslapan(horaInicio, horaFin, r.getHoraInicio(), r.getHoraFin())) {
-                    return false; 
+                if (inicioSol.isBefore(f2)&& finSol.isAfter(i2)){
+                    return false;
                 }
+                
             }
         }
+        
+        
+        }catch (Exception e){
+            System.out.println("Error en el formato de hora");
+            return false;
+        }
+        
+  
+
+    
+
+        
+
+      
         return true; 
     }
 
@@ -220,12 +243,12 @@ public class Repositorio {
         } catch (IOException e) { System.out.println("Error leyendo pagos"); }
     }
 
-    public void cargarCanchasPorDefecto() {
+    /*public void cargarCanchasPorDefecto() {
         if (numCanchas > 0) return;
         agregarCancha(new Cancha("C01", "La Bombonera", "Fútbol 5", 10, "08:00", "23:00", Cancha.DISPONIBLE));
         agregarCancha(new Cancha("C02", "El Maracaná",  "Fútbol 5", 10, "08:00", "23:00", Cancha.DISPONIBLE));
         agregarCancha(new Cancha("C03", "El Monumental","Fútbol 7", 14, "08:00", "23:00", Cancha.DISPONIBLE));
-    }
+    }*/
     
     public void cargarServiciosPorDefecto(){
         if (numServicios>0) return;
@@ -247,5 +270,57 @@ public class Repositorio {
         return total;
     }
     
+    
+     public void actualizarEstadosAutomaticos() {
+        java.time.LocalDate hoy = java.time.LocalDate.now();
+        java.time.LocalTime horaActual = java.time.LocalTime.now();
+
+        for (int i = 0; i < numReservas; i++) {
+            modelo.Reserva r = reservas[i];
+
+          
+            if (r.getEstado().equals(modelo.Reserva.CANCELADA)) {
+                continue;
+            }
+
+            boolean tienePagos = (calcularTotalPagado(r.getCodigo()) > 0);
+
+            try {
+                java.time.LocalDate fechaReserva = java.time.LocalDate.parse(r.getFecha());
+                java.time.LocalTime inicioReserva = java.time.LocalTime.parse(r.getHoraInicio());
+                java.time.LocalTime finReserva = java.time.LocalTime.parse(r.getHoraFin());
+
+                
+                
+               
+                if (fechaReserva.isBefore(hoy) || (fechaReserva.isEqual(hoy) && horaActual.isAfter(finReserva))) {
+                    r.setEstado(modelo.Reserva.FINALIZADA);
+                    System.out.println("Reserva " + r.getCodigo() + " FINALIZADA");
+                } 
+               
+                else if (fechaReserva.isEqual(hoy) && (horaActual.isAfter(inicioReserva) || horaActual.equals(inicioReserva)) && horaActual.isBefore(finReserva)) {
+                    r.setEstado(modelo.Reserva.EN_CURSO);
+                    System.out.println("Reserva " + r.getCodigo() + " EN_CURSO");
+                } 
+           
+                else {
+                    if (tienePagos) {
+                        r.setEstado(modelo.Reserva.CONFIRMADA);
+                    } else {
+                        r.setEstado(modelo.Reserva.PENDIENTE);
+                    }
+                    System.out.println("Reserva " + r.getCodigo() + " -> " + r.getEstado());
+                }
+                
+            } catch (Exception e) {
+                System.out.println("Error al actualizar estado de la reserva " + r.getCodigo() + ": " + e.getMessage());
+            }
+        }
+    }
+     
+     
+     
+     
+     
     
 }

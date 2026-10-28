@@ -10,7 +10,7 @@ public class CanchaPro {
     public static void main(String[] args) {
     Repositorio repo = new Repositorio();
     repo.cargarTodo();
-    repo.cargarCanchasPorDefecto();
+    /*repo.cargarCanchasPorDefecto();*/
     repo.cargarServiciosPorDefecto();
     
     VentanaPrincipal ventana = new VentanaPrincipal(repo);

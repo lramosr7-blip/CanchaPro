@@ -470,7 +470,7 @@ public class PanelReservas extends javax.swing.JPanel {
             return; 
         }
         
-      
+    
         
         //obtener los datos de los texfield
         String codCliente = cbxClientes.getSelectedItem().toString().split(" - ")[0];
@@ -480,22 +480,54 @@ public class PanelReservas extends javax.swing.JPanel {
         String hInicio = txtHoraInicio.getText().trim();
         String hFin = txtHoraFin.getText().trim();
         
+        if (hInicio.length()==4){
+            hInicio = "0"+hInicio;
+        }
         
-        //validar que sea una fecha valida
-          try{
-            LocalDate.parse(fecha);
-            LocalTime.parse(hInicio);
-            LocalTime.parse(hFin);
+        if(hFin.length()==4){
+            hFin ="0" +hFin;
+        }
+        
+        
+        if(fecha.isEmpty()|| hInicio.isEmpty()|| hFin.isEmpty()){
             
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(this, "formato Invalido. \nFecha: AAAA-MM-DD\nHora: HH:MM");
-            return;
+            JOptionPane.showMessageDialog(this, "Porfavor, llennar todo los campos de fecha y hora");
+           return; 
         }
         
-        if (fecha.isEmpty() || hInicio.isEmpty() || hFin.isEmpty()){
-            JOptionPane.showMessageDialog(this, "Porfavor, llenar todos los campos de fecha y hora");
+        
+        
+        LocalDate fechaRes;
+        LocalTime horaInicioRes;
+        
+        try{
+            fechaRes = LocalDate.parse(fecha);
+            horaInicioRes = LocalTime.parse(hInicio);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Formato Invalido. \n Fecha: AAAA-MM-DD\nHora: HH:MM ");
             return;
         }
+    
+        
+        
+        int diaSemana = fechaRes.getDayOfWeek().getValue(); // 1=lunes 7= domingo
+       int hora =horaInicioRes.getHour();
+       
+       double tarifa =0;
+       
+       if(diaSemana >= 6){//osea sabado o domingo 
+           tarifa =250.0; // a cualquie hora se cobrara eso
+          
+    }else{ // esto para lunes o viernes
+           if(hora>= 8 && hora<17){
+               tarifa= 150.0; // mañana y tarde 
+               
+           }else{
+               tarifa = 225.0; // de noche
+           }
+       }
+        
+        
         
         // verificar si la cancha esta diponible en ese horario
         boolean disponible = repo.esCanchaDisponible(codCancha, fecha, hInicio, hFin);
@@ -511,8 +543,12 @@ public class PanelReservas extends javax.swing.JPanel {
                     return;
                 }
                 
+                
+                
+                
+                
                 double horas = (minFin-minInicio)/60.0;
-                double total = horas *225.0;
+                double total = horas *tarifa;
                 
                 //calcular total de servicios
                 
@@ -535,7 +571,7 @@ public class PanelReservas extends javax.swing.JPanel {
                 
                 // se crea la reserva
                 String codReserva = "R"+(repo.numReservas+1);
-                modelo.Reserva nueva = new modelo.Reserva(codReserva, codCliente, codCancha, fecha, hInicio, hFin, total, modelo.Reserva.PENDIENTE );
+                modelo.Reserva nueva = new modelo.Reserva(codReserva, codCliente, codCancha, fecha, hInicio, hFin, totalFinal, modelo.Reserva.PENDIENTE );
                 repo.agregarReserva(nueva);
                 
                 lblResultado.setText("Exito reserva "+ codReserva+" Creada. Total Q"+totalFinal);

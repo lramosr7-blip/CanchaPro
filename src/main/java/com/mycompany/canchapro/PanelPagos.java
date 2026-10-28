@@ -19,7 +19,7 @@ public class PanelPagos extends javax.swing.JPanel {
         for (int i = 0; i<repo.numReservas; i++){
             //solo mostrar unicamente las que no estan canceladas ni finalizadas
             if(!repo.reservas[i].getEstado().equals(modelo.Reserva.CANCELADA) && !repo.reservas[i].getEstado().equals(modelo.Reserva.FINALIZADA)){
-                cbxReservas.addItem(repo.reservas[i].getCodigo() + " - Cliente: "+repo.reservas[i].getCodigoCliente()+ "- Total: Q"+repo.reservas[i].getTotal());
+                cbxReservas.addItem(repo.reservas[i].getCodigo() + " - Cliente: "+repo.reservas[i].getCodigoCliente()+ " - Total: Q"+repo.reservas[i].getTotal());
                 
             }
         }
@@ -353,6 +353,7 @@ public class PanelPagos extends javax.swing.JPanel {
        modelo.Pago nuevoPago = new modelo.Pago(codPago, codReserva, fechaHoraActual, monto, metodo);
        
        repo.agregarPago(nuevoPago);
+       repo.actualizarEstadosAutomaticos();
        
        //actualizar la informacion en pantalla;
        cbxReservasActionPerformed(null);
