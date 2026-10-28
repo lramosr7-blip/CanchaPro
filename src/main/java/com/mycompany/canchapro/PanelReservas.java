@@ -86,6 +86,7 @@ public class PanelReservas extends javax.swing.JPanel {
         jScrollPane2 = new javax.swing.JScrollPane();
         listaServicios = new javax.swing.JList<>();
         btnQuitarServicio = new javax.swing.JButton();
+        btnCancelarReserva = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         lblResultado = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -228,6 +229,13 @@ public class PanelReservas extends javax.swing.JPanel {
         btnQuitarServicio.setOpaque(true);
         btnQuitarServicio.addActionListener(this::btnQuitarServicioActionPerformed);
 
+        btnCancelarReserva.setBackground(new java.awt.Color(255, 51, 51));
+        btnCancelarReserva.setFont(new java.awt.Font("Arial", 1, 15)); // NOI18N
+        btnCancelarReserva.setForeground(new java.awt.Color(255, 255, 255));
+        btnCancelarReserva.setText("CancelarReserva\n");
+        btnCancelarReserva.setFocusPainted(false);
+        btnCancelarReserva.addActionListener(this::btnCancelarReservaActionPerformed);
+
         javax.swing.GroupLayout panelNuevaReservaLayout = new javax.swing.GroupLayout(panelNuevaReserva);
         panelNuevaReserva.setLayout(panelNuevaReservaLayout);
         panelNuevaReservaLayout.setHorizontalGroup(
@@ -235,7 +243,6 @@ public class PanelReservas extends javax.swing.JPanel {
             .addGroup(panelNuevaReservaLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnReservar, javax.swing.GroupLayout.PREFERRED_SIZE, 671, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(panelNuevaReservaLayout.createSequentialGroup()
@@ -257,8 +264,12 @@ public class PanelReservas extends javax.swing.JPanel {
                             .addGap(24, 24, 24)
                             .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3)
-                                .addComponent(cbxCanchas, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                                .addComponent(cbxCanchas, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelNuevaReservaLayout.createSequentialGroup()
+                        .addComponent(btnReservar, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCancelarReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
                 .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelNuevaReservaLayout.createSequentialGroup()
                         .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,7 +314,9 @@ public class PanelReservas extends javax.swing.JPanel {
                                     .addComponent(txtHoraInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtHoraFin, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(31, 31, 31)
-                        .addComponent(btnReservar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnReservar, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnCancelarReserva, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 11, Short.MAX_VALUE))
                     .addGroup(panelNuevaReservaLayout.createSequentialGroup()
                         .addGroup(panelNuevaReservaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -600,37 +613,7 @@ public class PanelReservas extends javax.swing.JPanel {
     }//GEN-LAST:event_btnReservarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        // ver si se selecciono una fila
-        
-        int fila = tablaReservas.getSelectedRow();
-        
-        if (fila == -1){
-            JOptionPane.showMessageDialog(this, "Porfavor, Seleccione una reserva de la tabla primero");
-            return;
-        }
-        
-        //obterner el codigo de la reserva seleccionadad
-        String codReserva = tablaReservas.getValueAt(fila, 0).toString();
-        
-        //buscar la reserva en el arreglo y cambiar el estado
-        
-        for (int i= 0; i<repo.numReservas; i++){
-            if (repo.reservas[i].getCodigo().equals(codReserva)){
-                
-                //valiar por si ya esta cancelada
-                if(repo.reservas[i].getEstado().equals(modelo.Reserva.CANCELADA)){
-                    JOptionPane.showMessageDialog(this, "Esta reservas ya esta cancelada");
-                    return; 
-                }
-                
-                //cambiar estado
-                repo.reservas[i].setEstado(modelo.Reserva.CANCELADA);
-                JOptionPane.showMessageDialog(this, "Reserva cancelada. El registro se mantiene en el historial");
-                
-            }
-        }
-        
-        actualizarTabla();
+    
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnAgregarServicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgregarServicioActionPerformed
@@ -647,10 +630,62 @@ public class PanelReservas extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnQuitarServicioActionPerformed
 
+    private void btnCancelarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarReservaActionPerformed
+           // ver si se selecciono una fila
+        
+        int fila = tablaReservas.getSelectedRow();
+        
+        if (fila == -1){
+            JOptionPane.showMessageDialog(this, "Porfavor, Seleccione una reserva de la tabla primero");
+            return;
+        }
+        
+        //obterner el codigo de la reserva seleccionadad
+        String codReserva = tablaReservas.getValueAt(fila, 0).toString();
+        String estadoActual = tablaReservas.getValueAt(fila, 6).toString();
+        
+       //validar que no este cancelada o finalizada
+       if(estadoActual.equals(modelo.Reserva.CANCELADA)){
+           JOptionPane.showMessageDialog(this, "Esta Reserva ya esta cancelada");
+           return;
+       }
+       
+       if(estadoActual.equals(modelo.Reserva.FINALIZADA)){
+           JOptionPane.showMessageDialog(this, "No se puede cancelar una resevar una reserva ya finalizada");
+            return;  
+       }
+       
+       //pedir motivo de la cancelacion
+       String motivo;
+       motivo = JOptionPane.showInputDialog(this, "Ingrese el motivo de la cancelacion: ", "Cancelar Reserva");
+      
+       if (motivo == null || motivo.trim().isBlank()){
+           JOptionPane.showMessageDialog(this, "Debe de ingresar un motivo valido para cancelar");
+           return;
+       }
+       
+       
+       //buscar la reserva y apliacar los cambios
+       
+       for (int i =0; i<repo.numReservas; i++){
+           if (repo.reservas[i].getCodigo().equals(codReserva)){
+               repo.reservas[i].setEstado(modelo.Reserva.CANCELADA);
+               repo.reservas[i].setMotioCancelacion(motivo);
+               repo.reservas[i].setFechaCancelacion(LocalDate.now().toString());
+               
+               JOptionPane.showMessageDialog(this, "Reserva Cancelada Correctamente \n motivo guadado en el historial");
+               break;
+           }
+       }
+       actualizarTabla();
+        
+    }//GEN-LAST:event_btnCancelarReservaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarServicio;
     private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnCancelarReserva;
     private javax.swing.JButton btnQuitarServicio;
     private javax.swing.JButton btnReservar;
     private javax.swing.JComboBox<String> cbxCanchas;

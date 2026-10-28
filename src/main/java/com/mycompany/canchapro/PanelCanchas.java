@@ -17,6 +17,8 @@ public class PanelCanchas extends javax.swing.JPanel {
         initComponents();
         this.repo = repo;
         aplicarEstiloTabla();
+        actualizattabla();
+        
     }
 
     
@@ -453,7 +455,7 @@ public class PanelCanchas extends javax.swing.JPanel {
     private void tablaCanchasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaCanchasMouseClicked
        int fila = tablaCanchas.getSelectedRow();
        
-       if(fila!=1){
+       if(fila!=-1){
            txtCodigo.setText(tablaCanchas.getValueAt(fila, 0).toString());
            txtNombre.setText(tablaCanchas.getValueAt(fila, 1).toString());
            cbxTipo.setSelectedItem(tablaCanchas.getValueAt(fila,2).toString());

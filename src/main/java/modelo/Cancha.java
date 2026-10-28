@@ -3,7 +3,7 @@ package modelo;
 
 public class Cancha {
 public static final String DISPONIBLE  = "DISPONIBLE";
-public static final String MANTENIMIENTO = "MANTENIMINETO";
+public static final String MANTENIMIENTO = "MANTENIMIENTO";
 public static final String INACTIVA = "INACTIVA";
 
 private String codigo; 
