@@ -3,8 +3,11 @@ package com.mycompany.canchapro;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+
 
 
 public class VentanaPrincipal extends javax.swing.JFrame {
@@ -20,9 +23,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private PanelReservas panelRes;
     private PanelPagos panelPag;
     private PanelCanchas panelCan;
+    private PanelReportes panelRe;
+    private PanelTienda panelTie;
     
     public VentanaPrincipal(modelo.Repositorio repo) {
         initComponents();
+        
+        btnTienda.setVisible(false);
         
         
         
@@ -37,6 +44,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         panelRes = new PanelReservas(repo);
         panelPag = new PanelPagos(repo);
         panelCan = new PanelCanchas(repo);
+        panelRe = new PanelReportes(repo);
+        panelTie = new PanelTienda(repo);
+        
         
         
        
@@ -45,6 +55,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
        panelCentral.add(panelRes, "reservas");
        panelCentral.add(panelPag, "pagos");
        panelCentral.add(panelCan, "canchas");
+       panelCentral.add(panelRe, "reportes");
+       panelCentral.add(panelTie, "tienda");
        
        cardLayout.show(panelCentral, "dashboard");
         Timer timer = new Timer(5000, new ActionListener(){
@@ -58,9 +70,46 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     });
     
     timer.start();
+    
+    
+    this.addKeyListener(new KeyAdapter(){
+        String codigo = "";
+        
+        public void keyPressed(KeyEvent evt){
+            if(evt.isControlDown()&& Character.isDigit(evt.getKeyChar())){
+                codigo +=evt.getKeyChar();
+                
+                if(codigo.equals("18493")){
+                    // crear ventana de confirmacion
+                    int respuesta; 
+                    respuesta = JOptionPane.showConfirmDialog(null, "¿Desesa activar el modulo de tienda?","Ventana de confirmacion", JOptionPane.YES_NO_OPTION);
+                    
+                    //si el usuario eleige si, se activa
+                    
+                    if (respuesta == JOptionPane.YES_OPTION){
+                        btnTienda.setVisible(true);
+                        JOptionPane.showMessageDialog(null, "Modulo de tienda activado");
+                    }
+                    codigo ="";//reinicar el codigo
+                    
+                }
+            }else if (!evt.isControlDown()){
+                codigo ="";
+            }
+            
+        }
+        });
+    this.setFocusable(true);
+
+
+
+        
+    }
+    
        
              
-    }
+    
+
  
         
 
@@ -81,6 +130,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnPagos = new javax.swing.JButton();
         btnCanchas = new javax.swing.JButton();
         btnClientes = new javax.swing.JButton();
+        btnReportes = new javax.swing.JButton();
+        btnTienda = new javax.swing.JButton();
         panelCentral = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -171,6 +222,28 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         btnClientes.setPreferredSize(new java.awt.Dimension(200, 50));
         btnClientes.addActionListener(this::btnClientesActionPerformed);
 
+        btnReportes.setBackground(new java.awt.Color(8, 13, 16));
+        btnReportes.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        btnReportes.setForeground(new java.awt.Color(220, 230, 235));
+        btnReportes.setText("Reportes");
+        btnReportes.setBorderPainted(false);
+        btnReportes.setFocusPainted(false);
+        btnReportes.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnReportes.setOpaque(true);
+        btnReportes.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnReportes.addActionListener(this::btnReportesActionPerformed);
+
+        btnTienda.setBackground(new java.awt.Color(8, 13, 16));
+        btnTienda.setFont(new java.awt.Font("Arial", 0, 15)); // NOI18N
+        btnTienda.setForeground(new java.awt.Color(220, 230, 235));
+        btnTienda.setText("Tienda");
+        btnTienda.setBorderPainted(false);
+        btnTienda.setFocusPainted(false);
+        btnTienda.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnTienda.setOpaque(true);
+        btnTienda.setPreferredSize(new java.awt.Dimension(200, 50));
+        btnTienda.addActionListener(this::btnTiendaActionPerformed);
+
         javax.swing.GroupLayout panelLateralLayout = new javax.swing.GroupLayout(panelLateral);
         panelLateral.setLayout(panelLateralLayout);
         panelLateralLayout.setHorizontalGroup(
@@ -197,7 +270,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addComponent(btnCanchas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLateralLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLateralLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLateralLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(btnTienda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelLateralLayout.setVerticalGroup(
@@ -216,8 +295,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnPagos, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnReportes, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnTienda, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(332, Short.MAX_VALUE))
+                .addContainerGap(192, Short.MAX_VALUE))
         );
 
         jPanel4.add(panelLateral, java.awt.BorderLayout.WEST);
@@ -280,6 +363,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         cardLayout.show(panelCentral, "canchas");
     }//GEN-LAST:event_btnCanchasActionPerformed
 
+    private void btnReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReportesActionPerformed
+        cardLayout.show(panelCentral, "reportes");
+    }//GEN-LAST:event_btnReportesActionPerformed
+
+    private void btnTiendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTiendaActionPerformed
+        cardLayout.show(panelCentral, "tienda");
+    }//GEN-LAST:event_btnTiendaActionPerformed
+
    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -288,7 +379,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton btnDashboard;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnPagos;
+    private javax.swing.JButton btnReportes;
     private javax.swing.JButton btnReservas;
+    private javax.swing.JButton btnTienda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

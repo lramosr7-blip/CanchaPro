@@ -423,6 +423,8 @@ public class PanelCanchas extends javax.swing.JPanel {
            
            if(exitente != null){
                exitente.setNombre(nombre);
+               exitente.setTipo(tipo);
+               exitente.setCapacidad(capacidad);
                exitente.setEstado(estado);
                exitente.setHoraApertura(apertura);
                exitente.setHoraCierre(cierre);

@@ -20,8 +20,15 @@ public class Repositorio {
     public Pago[] pagos = new Pago[1000];
     public int numPagos = 0;
     
+    public Venta[] ventas = new Venta[1000];
+    public int numVentas=0;
+    
     public modelo.ServicioAdicional[] servicios = new modelo.ServicioAdicional[20];
     public int numServicios = 0;
+    
+    public modelo.Producto[] productos = new modelo.Producto[100];
+    public int numProductos = 0;
+    
     
     public boolean agregarServicio (modelo.ServicioAdicional s){
         if (numServicios >= servicios.length ) return false;
@@ -36,11 +43,16 @@ public class Repositorio {
         }
         return null;
     }
+    
+    
 
     private final String RUTA_CLIENTES = "datos/clientes.csv";
     private final String RUTA_CANCHAS   = "datos/canchas.csv";
     private final String RUTA_RESERVAS  = "datos/reservas.csv";
     private final String RUTA_PAGOS     = "datos/pagos.csv";
+    private final String RUTA_SERVICIOS = "datos/servicios.csv";
+    private final String RUTA_PRODUCTOS = "datos/productos.csv";
+    private final String RUTA_VENTAS = "datos/ventas.csv";
 
     public boolean agregarCliente(Cliente c) {
         if (numClientes >= clientes.length) return false;
@@ -115,7 +127,7 @@ public class Repositorio {
             DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("H:mm");
         LocalTime apertura = LocalTime.parse(c.getHoraApertura(),formatoHora);
         LocalTime cierre = LocalTime.parse(c.getHoraCierre(), formatoHora);
-        LocalTime inicioSol = LocalTime.parse(horaInicio);
+        LocalTime inicioSol = LocalTime.parse(horaInicio, formatoHora);
         LocalTime finSol = LocalTime.parse(horaFin, formatoHora);
         
         if (inicioSol.isBefore(apertura) || finSol.isAfter(cierre)) {
@@ -172,7 +184,23 @@ public class Repositorio {
             bw = new BufferedWriter(new FileWriter(RUTA_PAGOS));
             for (int i = 0; i < numPagos; i++) { bw.write(pagos[i].aCSV()); bw.newLine(); }
             bw.close();
-
+            
+            bw = new BufferedWriter(new FileWriter(RUTA_SERVICIOS));
+            for (int i = 0; i < numServicios; i++) { bw.write(servicios[i].aCSV()); bw.newLine(); }
+            bw.close();
+            
+            bw = new BufferedWriter(new FileWriter(RUTA_PRODUCTOS));
+            for (int i = 0; i < numProductos; i++) { bw.write(productos[i].aCSV()); bw.newLine(); }
+            bw.close();
+            
+            bw = new BufferedWriter(new FileWriter(RUTA_VENTAS));
+            for (int i = 0; i < numVentas; i++) {
+            bw.write(ventas[i].aCSV());
+            bw.newLine();
+            }
+            bw.close();
+            
+            
             System.out.println("Todo guardado exitosamente en el disco.");
         } catch (IOException e) {
             System.out.println("Error al guardar: " + e.getMessage());
@@ -180,7 +208,11 @@ public class Repositorio {
     }
 
     public void cargarTodo() {
-        numClientes = 0; numCanchas = 0; numReservas = 0; numPagos = 0;
+        numClientes = 0;
+        numCanchas = 0;
+        numReservas = 0; 
+        numPagos = 0;
+        numVentas=0;
 
         // Clientes
         try {
@@ -241,14 +273,74 @@ public class Repositorio {
                 br.close();
             }
         } catch (IOException e) { System.out.println("Error leyendo pagos"); }
+        
+        
+        
+        //servicios
+       // Servicios
+    try {
+    File f = new File(RUTA_SERVICIOS);
+    if (f.exists()) {
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            if (linea.trim().isEmpty()) continue;
+            try { servicios[numServicios] = ServicioAdicional.desdeCSV(linea); numServicios++; } 
+            catch (Exception e) { System.out.println("Error servicio: " + linea); }
+        }
+        br.close();
     }
+    } catch (IOException e) { System.out.println("Error leyendo servicios"); }
+    
+    
+    // productos
+    try {
+    File f = new File(RUTA_PRODUCTOS);
+    if (f.exists()) {
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        String linea;
+        while ((linea = br.readLine()) != null) {
+            if (linea.trim().isEmpty()) continue;
+            try { productos[numProductos] = Producto.desdeCSV(linea); numProductos++; } 
+            catch (Exception e) { System.out.println("Error producto: " + linea); }
+        }
+        br.close();
+    }
+    } catch (IOException e) { System.out.println("Error leyendo productos"); }
+    
+    //ventas
+    try {
+    File f = new File(RUTA_VENTAS);
 
-    /*public void cargarCanchasPorDefecto() {
-        if (numCanchas > 0) return;
-        agregarCancha(new Cancha("C01", "La Bombonera", "Fútbol 5", 10, "08:00", "23:00", Cancha.DISPONIBLE));
-        agregarCancha(new Cancha("C02", "El Maracaná",  "Fútbol 5", 10, "08:00", "23:00", Cancha.DISPONIBLE));
-        agregarCancha(new Cancha("C03", "El Monumental","Fútbol 7", 14, "08:00", "23:00", Cancha.DISPONIBLE));
-    }*/
+    if (f.exists()) {
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        String linea;
+
+        while ((linea = br.readLine()) != null) {
+            if (linea.trim().isEmpty()) {
+                continue;
+            }
+
+            try {
+                ventas[numVentas] = Venta.desdeCSV(linea);
+                numVentas++;
+            } catch (Exception e) {
+                System.out.println("Error en venta: " + linea);
+            }
+        }
+
+        br.close();
+    }
+} catch (IOException e) {
+    System.out.println("Error leyendo ventas");
+}
+    
+    
+    
+    }
+    
+
+    
     
     public void cargarServiciosPorDefecto(){
         if (numServicios>0) return;
@@ -284,6 +376,11 @@ public class Repositorio {
             }
 
             boolean tienePagos = (calcularTotalPagado(r.getCodigo()) > 0);
+            
+            if(!tienePagos){
+                r.setEstado(modelo.Reserva.PENDIENTE);
+                continue;
+            }
 
             try {
                 java.time.LocalDate fechaReserva = java.time.LocalDate.parse(r.getFecha());
@@ -322,5 +419,225 @@ public class Repositorio {
      
      
      
-    
+   //reportes
+      public String[][] generarReporte(int opcion) {
+        String[][] datos = new String[0][0];
+        
+        switch (opcion) {
+            case 0: // reservas por cancha
+                datos = new String[numCanchas][2];
+                for (int i = 0; i < numCanchas; i++) {
+                    int contador = 0;
+                    for (int j = 0; j < numReservas; j++) {
+                        if (reservas[j].getCodigoCancha().equals(canchas[i].getCodigo()) && !reservas[j].getEstado().equals(Reserva.CANCELADA)) {
+                            contador++;
+                        }
+                    }
+                    datos[i][0] = canchas[i].getNombre();
+                    datos[i][1] = String.valueOf(contador);
+                }
+                break;
+                
+            case 1: // cliete con mas reservas
+                datos = new String[numClientes][2];
+                for (int i = 0; i < numClientes; i++) {
+                    int contador = 0;
+                    for (int j = 0; j < numReservas; j++) {
+                        if (reservas[j].getCodigoCliente().equals(clientes[i].getCodigo()) && !reservas[j].getEstado().equals(Reserva.CANCELADA)) {
+                            contador++;
+                        }
+                    }
+                    datos[i][0] = clientes[i].getNombre();
+                    datos[i][1] = String.valueOf(contador);
+                }
+                break;
+                
+            case 2: // ingresos totales
+                double total = 0;
+                for (int i = 0; i < numPagos; i++) {
+                    total += pagos[i].getMonto();
+                }
+                datos = new String[1][2];
+                datos[0][0] = "Ingresos Totales Recaudados";
+                datos[0][1] = "Q " + total;
+                break;
+                
+            case 3: // reservas canceladas
+                int cont = 0;
+                for (int i = 0; i < numReservas; i++) {
+                    if (reservas[i].getEstado().equals(Reserva.CANCELADA)) {
+                        cont++;
+                    }
+                }
+                datos = new String[1][2];
+                datos[0][0] = "Total de Reservas Canceladas";
+                datos[0][1] = String.valueOf(cont);
+                break;
+                
+            case 4: // 5. reservas por fechas
+                String[] fechas = new String[numReservas];
+                int[] conteos = new int[numReservas];
+                int numFechas = 0;
+                for (int i = 0; i < numReservas; i++) {
+                    String f = reservas[i].getFecha();
+                    boolean encontrada = false;
+                    for (int j = 0; j < numFechas; j++) {
+                        if (fechas[j].equals(f)) {
+                            conteos[j]++;
+                            encontrada = true;
+                            break;
+                        }
+                    }
+                    if (!encontrada) {
+                        fechas[numFechas] = f;
+                        conteos[numFechas] = 1;
+                        numFechas++;
+                    }
+                }
+                datos = new String[numFechas][2];
+                for (int i = 0; i < numFechas; i++) {
+                    datos[i][0] = fechas[i];
+                    datos[i][1] = String.valueOf(conteos[i]);
+                }
+                break;
+                
+            case 5: // pagos pendientes
+                int contPendientes = 0;
+                for (int i = 0; i < numReservas; i++) {
+                    if (!reservas[i].getEstado().equals(Reserva.CANCELADA)) {
+                        double pagado = calcularTotalPagado(reservas[i].getCodigo());
+                        if (pagado < reservas[i].getTotal()) {
+                            contPendientes++;
+                        }
+                    }
+                }
+                datos = new String[contPendientes][2];
+                int index = 0;
+                for (int i = 0; i < numReservas; i++) {
+                    if (!reservas[i].getEstado().equals(Reserva.CANCELADA)) {
+                        double pagado = calcularTotalPagado(reservas[i].getCodigo());
+                        if (pagado < reservas[i].getTotal()) {
+                            datos[index][0] = reservas[i].getCodigo();
+                            datos[index][1] = "Falta Q" + (reservas[i].getTotal() - pagado);
+                            index++;
+                        }
+                    }
+                }
+                break;
+                
+            case 6: // cancha mas utilizada
+                String maxCancha = "Ninguna";
+                int maxCont = -1;
+                for (int i = 0; i < numCanchas; i++) {
+                    int contador = 0;
+                    for (int j = 0; j < numReservas; j++) {
+                        if (reservas[j].getCodigoCancha().equals(canchas[i].getCodigo()) && !reservas[j].getEstado().equals(Reserva.CANCELADA)) {
+                            contador++;
+                        }
+                    }
+                    if (contador > maxCont) {
+                        maxCont = contador;
+                        maxCancha = canchas[i].getNombre();
+                    }
+                }
+                datos = new String[1][2];
+                datos[0][0] = maxCancha;
+                datos[0][1] = maxCont + " reservas";
+                break;
+                
+            case 7: // horarios de mayor demanda
+                String[] horas = new String[numReservas];
+                int[] conteosHoras = new int[numReservas];
+                int numHoras = 0;
+                for (int i = 0; i < numReservas; i++) {
+                    String h = reservas[i].getHoraInicio();
+                    boolean encontrada = false;
+                    for (int j = 0; j < numHoras; j++) {
+                        if (horas[j].equals(h)) {
+                            conteosHoras[j]++;
+                            encontrada = true;
+                            break;
+                        }
+                    }
+                    if (!encontrada) {
+                        horas[numHoras] = h;
+                        conteosHoras[numHoras] = 1;
+                        numHoras++;
+                    }
+                }
+                datos = new String[numHoras][2];
+                for (int i = 0; i < numHoras; i++) {
+                    datos[i][0] = horas[i];
+                    datos[i][1] = String.valueOf(conteosHoras[i]);
+                }
+                break;
+                
+            default:
+                System.out.println("Opción no válida");
+                break;
+        }
+        
+        return datos;
+    }
+     
+     
+         public String[] obtenerColumnasReporte(int opcion) {
+        switch (opcion) {
+            case 0: return new String[]{"Cancha", "Cantidad de Reservas"};
+            case 1: return new String[]{"Cliente", "Cantidad de Reservas"};
+            case 2: return new String[]{"Concepto", "Monto Total"};
+            case 3: return new String[]{"Concepto", "Cantidad"};
+            case 4: return new String[]{"Fecha", "Cantidad de Reservas"};
+            case 5: return new String[]{"Reserva", "Saldo Pendiente"};
+            case 6: return new String[]{"Cancha Más Utilizada", "Total Reservas"};
+            case 7: return new String[]{"Hora de Inicio", "Cantidad de Reservas"};
+            default: return new String[]{"", ""};
+        }
+    }
+         
+         
+         public boolean agregarProducto(modelo.Producto p){
+             if (numProductos >= productos.length) return false;
+             
+             
+             //si ya existe se actualiza el stokc
+             for (int i =0; i<numProductos; i++){
+                 if(productos[i].getCodigo().equals(p.getCodigo())){
+                    productos[i].setStock(productos[i].getStock() + p.getStock()); // Sumar stock
+                    
+                    return true;
+
+                     
+                     
+                     
+                     
+                 }
+             }
+             //se agrega si no existe
+             productos[numProductos] =p;
+             numProductos++;
+             return true;
+         }
+         
+         public modelo.Producto buscarProductosPorCodigo(String codigo){
+             for(int i = 0; i < numProductos; i++){
+                 if (productos[i].getCodigo().equals(codigo)) return productos[i];
+             }
+             return null;
+         }
+         
+         
+         public boolean agregarVenta(Venta venta){
+             if(numVentas >= ventas.length){
+                 return false;
+             }
+             
+             ventas[numVentas] = venta;
+             numVentas++;
+             return true;
+         }
+       
+         
+         
+         
 }

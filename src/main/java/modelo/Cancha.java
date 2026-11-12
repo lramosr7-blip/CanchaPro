@@ -71,6 +71,15 @@ private String estado;
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setCapacidad(int capacidad) {
+        this.capacidad = capacidad;
+    }
+    
     
     
     public String aCSV(){

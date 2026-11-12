@@ -583,8 +583,20 @@ public class PanelReservas extends javax.swing.JPanel {
                 
                 
                 // se crea la reserva
+                String codigosServicios = "";
                 String codReserva = "R"+(repo.numReservas+1);
                 modelo.Reserva nueva = new modelo.Reserva(codReserva, codCliente, codCancha, fecha, hInicio, hFin, totalFinal, modelo.Reserva.PENDIENTE );
+                for ( int i =0; i<modeloLista.getSize(); i++){
+                    String textoServicio = modeloLista.getElementAt(i);
+                     String codigoServicio = textoServicio.split(" - ")[0];
+                     
+                     if(!codigosServicios.isEmpty()){
+                         codigosServicios += ";";
+                     }
+                     codigosServicios += codigoServicio;
+                     
+                }
+                nueva.setServicios(codigosServicios);
                 repo.agregarReserva(nueva);
                 
                 lblResultado.setText("Exito reserva "+ codReserva+" Creada. Total Q"+totalFinal);

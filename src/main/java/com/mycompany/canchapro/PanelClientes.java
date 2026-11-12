@@ -411,10 +411,18 @@ public class PanelClientes extends javax.swing.JPanel {
        String correo = txtCorreo.getText().trim();
        String fecha = txtFecha.getText().trim();
        
-       if (codigo.isEmpty() || nombre.isBlank()){
-           JOptionPane.showMessageDialog(this, "El código y el  nombre son obligatorios");
+       if (codigo.isEmpty() || nombre.isEmpty() || tel.isEmpty()){
+           JOptionPane.showMessageDialog(this, "El código, el nombre y el telefono son obligatorios");
            return; 
        }
+       
+       for (int  i = 0; i<mirepo.numClientes; i++){
+           modelo.Cliente cliente = mirepo.clientes[i];
+           if (cliente.getTelefono().equals(tel) && !cliente.getCodigo().equals(codigo)){
+               JOptionPane.showMessageDialog(this, "Ya existe un cliente con ese telefono");
+               return;
+           }
+       } 
        
        //verificar si ya existe para actualizarlo o crear uno nuevo
        

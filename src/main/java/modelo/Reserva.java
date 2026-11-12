@@ -18,6 +18,7 @@ public class Reserva {
     private String horaFin;
     private double total;
     private String estado;
+    private String servicios = "";
     
     
     //para la cancelacion de alguna reserva
@@ -98,13 +99,13 @@ public class Reserva {
         }
         
    
-        return codigo + "," + codigoCliente + "," + codigoCancha + "," + fecha + "," + horaInicio + "," + horaFin + "," + total + "," + estado + "," + motivo + "," + fechaCan;
+        return codigo + "," + codigoCliente + "," + codigoCancha + "," + fecha + "," + horaInicio + "," + horaFin + "," + total + "," + estado + "," + motivo + "," + fechaCan+ ","+servicios;
          
 
     }
     
     public static Reserva desdeCSV(String linea){
-        String [] p = linea.split(",");
+        String [] p = linea.split(",",-1);
         Reserva r= new Reserva(p[0], p[1], p[2], p[3], p[4], p[5], Double.parseDouble(p[6]), p[7]);
         
         if (p.length > 8){
@@ -114,8 +115,17 @@ public class Reserva {
         if(p.length > 9){
             r.setFechaCancelacion(p[9]);
         }
+        
+        if(p.length>10){
+            r.setServicios(p[10]);
+        }
+        
         return r;
+        
+        
     }
+    
+    
 
     public String getMotioCancelacion() {
         return motivoCancelacion;
@@ -131,6 +141,14 @@ public class Reserva {
 
     public void setMotioCancelacion(String motioCancelacion) {
         this.motivoCancelacion = motioCancelacion;
+    }
+
+    public String getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(String servicios) {
+        this.servicios = servicios;
     }
     
     
