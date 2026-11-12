@@ -104,7 +104,6 @@ public class PanelReservas extends javax.swing.JPanel {
 
         lblDescripcion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDescripcion.setForeground(new java.awt.Color(242, 241, 241));
-        lblDescripcion.setText("Consultas la disponibilidad y registra nuevas reservas.");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);

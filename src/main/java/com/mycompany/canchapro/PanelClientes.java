@@ -59,7 +59,6 @@ public class PanelClientes extends javax.swing.JPanel {
 
         lblDescripcion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDescripcion.setForeground(new java.awt.Color(242, 241, 241));
-        lblDescripcion.setText("Registra, busca y administra la informacion de los clientes");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -260,7 +259,7 @@ public class PanelClientes extends javax.swing.JPanel {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 312, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

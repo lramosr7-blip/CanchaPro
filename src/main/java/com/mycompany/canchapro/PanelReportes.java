@@ -83,7 +83,6 @@ public class PanelReportes extends javax.swing.JPanel {
 
         lblDescripcion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDescripcion.setForeground(new java.awt.Color(242, 241, 241));
-        lblDescripcion.setText("Consulta las estadisticas y la actividad ");
 
         lblTitulo1.setFont(new java.awt.Font("Arial", 1, 26)); // NOI18N
         lblTitulo1.setForeground(new java.awt.Color(255, 255, 255));
@@ -206,7 +205,7 @@ public class PanelReportes extends javax.swing.JPanel {
                 .addComponent(lblTituloResultados)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

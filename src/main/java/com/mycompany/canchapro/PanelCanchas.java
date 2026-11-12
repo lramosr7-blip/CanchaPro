@@ -126,7 +126,6 @@ public class PanelCanchas extends javax.swing.JPanel {
 
         lblDescripcion.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDescripcion.setForeground(new java.awt.Color(242, 241, 241));
-        lblDescripcion.setText("Registra, actualiza y administra la informacion de las canchas");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -383,7 +382,7 @@ public class PanelCanchas extends javax.swing.JPanel {
                 .addComponent(panelNuevaReserva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(29, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
