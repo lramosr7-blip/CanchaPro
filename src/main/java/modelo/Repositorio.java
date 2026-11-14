@@ -342,15 +342,7 @@ public class Repositorio {
 
     
     
-    public void cargarServiciosPorDefecto(){
-        if (numServicios>0) return;
-            agregarServicio(new modelo.ServicioAdicional("S01", "Balón", 30, true));
-            agregarServicio(new modelo.ServicioAdicional("S02", "Arbitro", 100, true));
-            agregarServicio(new modelo.ServicioAdicional("S03", "Chalecos", 25, true));
-                    
-        
-    
-}
+   
     
     public double calcularTotalPagado(String codigoReserva){
         double total = 0;
